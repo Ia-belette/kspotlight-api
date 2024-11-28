@@ -38,11 +38,22 @@ app.get("/:tmdbId", async (c) => {
     }
 
     const data = await contentServices.getContentById(tmdbId);
+
     if (!data) {
       return c.json({ error: "Content not found" }, 404);
     }
 
-    return c.json(data);
+    const similarContents = await contentServices.getSimilarContents(
+      data?.category?.category_id || null,
+      tmdbId
+    );
+
+    const response = {
+      ...data,
+      similarContents: similarContents,
+    };
+
+    return c.json(response);
   } catch (error: any) {
     return c.json(
       { error: "Failed to fetch content by ID", details: error.message },

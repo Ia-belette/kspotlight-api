@@ -24,4 +24,9 @@ export interface ContentServiceProtocol {
     pageSize?: number,
     after?: string
   ): Promise<Page<ContentRecord>>;
+
+  getSimilarContents(
+    currentCategory: number | null,
+    tmdbId: string
+  ): Promise<Page<ContentRecord>>;
 }

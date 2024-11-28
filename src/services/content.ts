@@ -163,4 +163,28 @@ export class ContentServices implements ContentServiceProtocol {
         pagination: { size: pageSize, after },
       });
   }
+
+  /**
+   * Retrieves a page of similar content records for the given TMDB ID.
+   *
+   * @param {string} currentCategory TMDB ID of the content
+   * @param {number} [pageSize=20] Page size
+   * @param {string} [after] Cursor to start from
+   * @returns {Promise<Page<ContentRecord>>} Page of content records
+   */
+  async getSimilarContents(
+    currentCategory: number | null,
+    tmdbId: string
+  ): Promise<Page<ContentRecord>> {
+    tmdbId = this.validateId(tmdbId, "tmdbId");
+
+    return await this.xata.db.content
+      .sort("xata.createdAt", "asc")
+      .select(["*", "category.*"])
+      .filter("category.category_id", currentCategory)
+      .filter("content_id", parseInt(tmdbId))
+      .getPaginated({
+        pagination: { size: 8 },
+      });
+  }
 }
