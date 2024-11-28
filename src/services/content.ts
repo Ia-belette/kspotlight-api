@@ -88,7 +88,9 @@ export class ContentServices implements ContentServiceProtocol {
   async getContentById(tmdbId: string): Promise<ContentRecord | null> {
     tmdbId = this.validateId(tmdbId, "tmdbId");
 
-    return await this.xata.db.content.filter("content_id", tmdbId).getFirst();
+    return await this.xata.db.content
+      .filter("content_id", parseInt(tmdbId))
+      .getFirst();
   }
 
   /**
