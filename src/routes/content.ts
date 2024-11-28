@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { Bindings } from "..";
 import { ContentServices } from "../services/content";
+import { HTTPException } from "hono/http-exception";
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -13,7 +14,7 @@ app.get("/", async (c) => {
       : 20;
 
     if (isNaN(pageSize) || pageSize <= 0 || pageSize > 100) {
-      return c.json({ error: "Invalid pageSize parameter" }, 400);
+      throw new HTTPException(400, { message: "Invalid pageSize parameter" });
     }
 
     const after = c.req.param("after");
@@ -21,10 +22,10 @@ app.get("/", async (c) => {
     const data = await contentServices.getAllContents(pageSize, after);
     return c.json(data);
   } catch (error: any) {
-    return c.json(
-      { error: "Failed to fetch contents", details: error.message },
-      500
-    );
+    throw new HTTPException(500, {
+      message: "Failed to fetch contents",
+      cause: error.message,
+    });
   }
 });
 
@@ -34,13 +35,13 @@ app.get("/:tmdbId", async (c) => {
     const tmdbId = c.req.param("tmdbId");
 
     if (!tmdbId) {
-      return c.json({ error: "tmdbId parameter is required" }, 400);
+      throw new HTTPException(400, { message: "tmdbId parameter is required" });
     }
 
     const data = await contentServices.getContentById(tmdbId);
 
     if (!data) {
-      return c.json({ error: "Content not found" }, 404);
+      throw new HTTPException(404, { message: "Content not found" });
     }
 
     const similarContents = await contentServices.getSimilarContents(
@@ -55,10 +56,10 @@ app.get("/:tmdbId", async (c) => {
 
     return c.json(response);
   } catch (error: any) {
-    return c.json(
-      { error: "Failed to fetch content by ID", details: error.message },
-      500
-    );
+    throw new HTTPException(500, {
+      message: "Failed to fetch content by ID",
+      cause: error.message,
+    });
   }
 });
 
@@ -71,7 +72,7 @@ app.get("/recommended", async (c) => {
       : 20;
 
     if (isNaN(pageSize) || pageSize <= 0 || pageSize > 100) {
-      return c.json({ error: "Invalid pageSize parameter" }, 400);
+      throw new HTTPException(400, { message: "Invalid pageSize parameter" });
     }
 
     const after = c.req.param("after");
@@ -79,10 +80,10 @@ app.get("/recommended", async (c) => {
     const data = await contentServices.getRecommendedContents(pageSize, after);
     return c.json(data);
   } catch (error: any) {
-    return c.json(
-      { error: "Failed to fetch recommended contents", details: error.message },
-      500
-    );
+    throw new HTTPException(500, {
+      message: "Failed to fetch recommended contents",
+      cause: error.message,
+    });
   }
 });
 
