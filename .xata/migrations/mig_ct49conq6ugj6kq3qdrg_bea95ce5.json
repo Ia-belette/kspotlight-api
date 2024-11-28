@@ -1,0 +1,12 @@
+{
+  "id": "mig_ct49conq6ugj6kq3qdrg",
+  "parentID": "mig_ct48rp7q6ugj6kq3qdp0",
+  "checksum": "1:bea95ce5461f715fdc78006c55e65e3eac82e25423a2f5f5aaaf73ae64afd898",
+  "operations": [
+    {
+      "removeTable": {
+        "table": "nextauth_users_accounts"
+      }
+    }
+  ]
+}
