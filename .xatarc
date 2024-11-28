@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://sansx-u5g6u4.us-east-1.xata.sh/db/kspotlight",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
