@@ -19,4 +19,9 @@ export interface ContentServiceProtocol {
     pageSize?: number,
     after?: string
   ): Promise<Page<ContentRecord>>;
+
+  getRecommendedContents(
+    pageSize?: number,
+    after?: string
+  ): Promise<Page<ContentRecord>>;
 }
