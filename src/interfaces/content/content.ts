@@ -3,6 +3,12 @@ import { Page } from '@xata.io/client';
 import { ContentRecord } from '@/xata';
 
 export interface ContentServiceProtocol {
+  searchContents(
+    query: string,
+    pageSize?: number,
+    after?: string
+  ): Promise<Page<ContentRecord>>;
+
   getAllContents(
     pageSize?: number,
     after?: string
