@@ -1,10 +1,10 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { createRoute } from '@hono/zod-openapi';
+import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
 import { Bindings } from '..';
 import { ContentServices } from '../services/content';
-import { z } from '@hono/zod-openapi';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
