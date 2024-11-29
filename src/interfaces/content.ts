@@ -25,4 +25,14 @@ export interface ContentServiceProtocol {
     currentCategory: number | null,
     tmdbId: string
   ): Promise<Page<ContentRecord>>;
+
+  addContent(
+    tmdbId: string,
+    type: string,
+    recommended: boolean,
+    tmdbApiKey: string
+  ): Promise<{
+    message: string;
+    content: ContentRecord;
+  }>;
 }
