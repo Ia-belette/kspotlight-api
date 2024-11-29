@@ -4,15 +4,15 @@ import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
 import { Bindings } from '@/index';
+import { RequestBodySchema } from '@/schemas/category/create-content-schemas';
 import {
   QuerySchema,
   ContentResponseSchema,
 } from '@/schemas/category/query-schemas';
+import { SearchQuerySchema } from '@/schemas/category/search-schemas';
 import { RecommendedContentResponseSchema } from '@/schemas/content/recommended-schemas';
 import { TmdbIdSchema } from '@/schemas/content/tmdb-schemas';
 import { ContentServices } from '@/services/content';
-import { SearchQuerySchema } from '@/schemas/category/search-schemas';
-import { RequestBodySchema } from '@/schemas/category/create-content-schemas';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 

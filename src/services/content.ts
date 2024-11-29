@@ -1,11 +1,11 @@
 import { Page } from '@xata.io/client';
-
-import { validateCursor, validateId, validatePageSize } from '@/utils';
+import { HTTPException } from 'hono/http-exception';
 
 import { ContentServiceProtocol } from '@/interfaces/content';
+import { validateCursor, validateId, validatePageSize } from '@/utils';
 import { ContentRecord, XataClient } from '@/xata';
+
 import { TmdbService } from './tmdb';
-import { HTTPException } from 'hono/http-exception';
 
 export class ContentServices implements ContentServiceProtocol {
   private xata: XataClient;
@@ -161,7 +161,6 @@ export class ContentServices implements ContentServiceProtocol {
           overview: overview,
           vote_average: String(vote_average),
         });
- 
       } else {
         newContent = existingContent;
       }
