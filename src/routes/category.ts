@@ -54,6 +54,7 @@ const ContentResponseSchema = z
 const categoriesRoute = createRoute({
   method: 'get',
   path: '/',
+  tags: ['Categories'],
   request: {
     query: QuerySchema,
   },
@@ -120,6 +121,7 @@ const CategoryParamsSchema = z.object({
 const categoryContentRoute = createRoute({
   method: 'get',
   path: '/{categoryId}',
+  tags: ['Categories'],
   request: {
     query: QuerySchema,
     params: z.object({
