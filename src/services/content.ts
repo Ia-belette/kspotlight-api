@@ -2,8 +2,8 @@ import { Page } from '@xata.io/client';
 
 import { validateCursor, validateId, validatePageSize } from '@/utils';
 
-import { ContentServiceProtocol } from '../interfaces/content/content';
-import { ContentRecord, XataClient } from '../xata';
+import { ContentServiceProtocol } from '@/interfaces/content/content';
+import { ContentRecord, XataClient } from '@/xata';
 
 export class ContentServices implements ContentServiceProtocol {
   private xata: XataClient;
@@ -13,6 +13,31 @@ export class ContentServices implements ContentServiceProtocol {
     private branch: string = 'main'
   ) {
     this.xata = new XataClient({ apiKey, branch });
+  }
+
+  async searchContents(
+    query: string,
+    pageSize: number = 20,
+    after?: string
+  ): Promise<Page<ContentRecord>> {
+    pageSize = validatePageSize(pageSize);
+    after = validateCursor(after);
+
+    return await this.xata.db.content
+      .select(['*'])
+      .filter({
+        $any: {
+          original_title: {
+            $iContains: query,
+          },
+          title: {
+            $iContains: query,
+          },
+        },
+      })
+      .getPaginated({
+        pagination: { size: pageSize, after },
+      });
   }
 
   async getAllContents(
