@@ -2,7 +2,7 @@ export type ContentDetails = {
   genres: {
     id: number;
     name: string;
-  };
+  }[];
   release_date?: string;
   first_air_date?: string;
   backdrop_path?: string;
@@ -11,6 +11,7 @@ export type ContentDetails = {
   title?: string;
   tagline?: string;
   overview?: string;
+  vote_average?: number;
 };
 
 export type Provider = {
