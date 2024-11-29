@@ -1,6 +1,6 @@
 import { CategoriesRecord, ContentRecord, XataClient } from "../xata";
 import { Page } from "@xata.io/client";
-import { ContentServiceProtocol } from "../interfaces/content";
+import { ContentServiceProtocol } from "../interfaces/content/content";
 
 export class ContentServices implements ContentServiceProtocol {
   private xata: XataClient;
