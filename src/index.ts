@@ -1,8 +1,9 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-import { HTTPException } from "hono/http-exception";
-import { swaggerUI } from "@hono/swagger-ui";
-import content from "./routes/content";
-import category from "./routes/category";
+import { swaggerUI } from '@hono/swagger-ui';
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { HTTPException } from 'hono/http-exception';
+
+import category from './routes/category';
+import content from './routes/content';
 
 export type Bindings = {
   XATA_BRANCH: string;
@@ -14,21 +15,21 @@ export type Bindings = {
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
 app.openAPIRegistry.registerComponent(
-  "securitySchemes",
-  "AuthorizationApiKey",
+  'securitySchemes',
+  'AuthorizationApiKey',
   {
-    type: "apiKey",
-    name: "Authorization",
-    in: "header",
+    type: 'apiKey',
+    name: 'Authorization',
+    in: 'header',
   }
 );
 
-app.get("/ui", swaggerUI({ url: "/doc" }));
-app.doc("/doc", {
-  openapi: "3.0.0",
+app.get('/ui', swaggerUI({ url: '/doc' }));
+app.doc('/doc', {
+  openapi: '3.0.0',
   info: {
-    version: "1.0.0",
-    title: "My API",
+    version: '1.0.0',
+    title: 'My API',
   },
   security: [
     {
@@ -37,21 +38,21 @@ app.doc("/doc", {
   ],
 });
 
-app.use("/v1/*", async (c, next) => {
-  const apiKey = c.req.header("Authorization");
+app.use('/v1/*', async (c, next) => {
+  const apiKey = c.req.header('Authorization');
 
   if (!apiKey) {
-    throw new HTTPException(401, { message: "Missing API Key" });
+    throw new HTTPException(401, { message: 'Missing API Key' });
   }
 
   if (apiKey !== c.env.KSPOTLIGHT_API_KEY) {
-    throw new HTTPException(403, { message: "Invalid API Key" });
+    throw new HTTPException(403, { message: 'Invalid API Key' });
   }
 
   await next();
 });
 
-app.route("/v1/content", content);
-app.route("/v1/category", category);
+app.route('/v1/content', content);
+app.route('/v1/category', category);
 
 export default app;
