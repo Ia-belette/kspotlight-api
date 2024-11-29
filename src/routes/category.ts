@@ -4,12 +4,12 @@ import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
 import { Bindings } from '@/index';
+import { CategoryResponseSchema } from '@/schemas/category/category-response';
 import { CategoryParamsSchema } from '@/schemas/category/category-schemas';
 import {
   ContentResponseSchema,
   QuerySchema,
 } from '@/schemas/category/query-schemas';
-import { CategoryResponseSchema } from '@/schemas/category/category-response';
 import { CategoryServices } from '@/services/category';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();

@@ -26,4 +26,3 @@ const QuerySchema = z.object({
       },
     }),
 });
-
