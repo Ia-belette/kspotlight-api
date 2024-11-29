@@ -8,7 +8,9 @@ import {
 
 export class TmdbService implements TdbmContentProtocol {
   private baseUrl = 'https://api.themoviedb.org/3/';
-  private apiKey = '';
+
+  constructor(private apiKey: string) {}
+
   private async getContentDetails(
     tmdbId: string,
     contentType: string
@@ -65,6 +67,7 @@ export class TmdbService implements TdbmContentProtocol {
     contentType: string
   ): Promise<FetchContentInfoResponse> {
     const contentDetails = await this.getContentDetails(tmdbId, contentType);
+
     const providers = await this.getKnownStreamingProviders(
       tmdbId,
       contentType
