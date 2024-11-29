@@ -2,7 +2,7 @@ import { Page } from '@xata.io/client';
 
 import { validateCursor, validateId, validatePageSize } from '@/utils';
 
-import { ContentServiceProtocol } from '@/interfaces/content/content';
+import { ContentServiceProtocol } from '@/interfaces/content';
 import { ContentRecord, XataClient } from '@/xata';
 
 export class ContentServices implements ContentServiceProtocol {

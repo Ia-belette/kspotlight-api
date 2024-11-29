@@ -1,6 +1,6 @@
 import { Page } from '@xata.io/client';
 
-import { CategoryServiceProtocol } from '@/interfaces/category/category';
+import { CategoryServiceProtocol } from '@/interfaces/category';
 import { validateCursor, validateId, validatePageSize } from '@/utils';
 import { CategoriesRecord, ContentRecord, XataClient } from '@/xata';
 
