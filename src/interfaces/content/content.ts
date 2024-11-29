@@ -1,6 +1,6 @@
 import { Page } from '@xata.io/client';
 
-import { CategoriesRecord, ContentRecord } from '@/xata';
+import { ContentRecord } from '@/xata';
 
 export interface ContentServiceProtocol {
   getAllContents(
