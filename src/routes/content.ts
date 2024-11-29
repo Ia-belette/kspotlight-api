@@ -3,73 +3,16 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
-import { Bindings } from '..';
-import { ContentServices } from '../services/content';
+import { Bindings } from '@/index';
+import { ContentServices } from '@/services/content';
+import {
+  QuerySchema,
+  ContentResponseSchema,
+} from '@/schemas/category/query-schemas';
+import { RecommendedContentResponseSchema } from '@/schemas/content/recommended-schemas';
+import { TmdbIdSchema } from '@/schemas/content/tmdb-schemas';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
-
-const QuerySchema = z.object({
-  pageSize: z
-    .string()
-    .regex(/^\d+$/, { message: 'pageSize must be a valid number' })
-    .optional()
-    .openapi({
-      param: {
-        name: 'pageSize',
-        in: 'query',
-        description: 'Number of items per page (default: 20, max: 100)',
-        required: false,
-      },
-      example: '20',
-    }),
-  after: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'after',
-        in: 'query',
-        description: 'Cursor for pagination',
-        required: false,
-      },
-    }),
-});
-
-const TmdbIdSchema = z.object({
-  tmdbId: z.string().openapi({
-    param: {
-      name: 'tmdbId',
-      in: 'path',
-      description: 'The TMDB ID of the content',
-      required: true,
-    },
-    example: '12345',
-  }),
-});
-
-const ContentResponseSchema = z
-  .object({
-    id: z.string().openapi({ example: 'content123' }),
-    title: z.string().openapi({ example: 'A Great Movie' }),
-    similarContents: z
-      .array(
-        z.object({
-          id: z.string().openapi({ example: 'content456' }),
-          title: z.string().openapi({ example: 'Another Great Movie' }),
-        })
-      )
-      .optional()
-      .openapi('SimilarContents'),
-  })
-  .openapi('ContentDetails');
-
-const RecommendedContentResponseSchema = z
-  .object({
-    id: z.string().openapi({ example: 'content789' }),
-    title: z.string().openapi({ example: 'A Recommended Movie' }),
-  })
-  .array()
-  .openapi('RecommendedContents');
 
 const allContentsRoute = createRoute({
   method: 'get',

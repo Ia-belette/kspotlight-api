@@ -5,14 +5,12 @@ import { HTTPException } from 'hono/http-exception';
 
 import { Bindings } from '@/index';
 import { ContentServices } from '@/services/content';
-import {
-  CategoryParamsSchema,
-  CategoryResponseSchema,
-} from '@/schemas/category/category-schemas';
+import { CategoryParamsSchema } from '@/schemas/category/category-schemas';
 import {
   ContentResponseSchema,
   QuerySchema,
 } from '@/schemas/category/query-schemas';
+import { CategoryResponseSchema } from '@/schemas/category/category-response';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
