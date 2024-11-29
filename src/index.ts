@@ -40,7 +40,9 @@ app.get('/', (c) => {
           }
         </style>
       </head>
-      ${SwaggerUI({ url: '/doc' })}
+      ${SwaggerUI({
+        url: '/doc',
+      })}
     </html>
   `);
 });
@@ -48,12 +50,25 @@ app.get('/', (c) => {
 app.doc('/doc', {
   openapi: '3.0.0',
   info: {
-    version: '1.0.0',
     title: 'KSpotlight API',
+    version: '1.0.0',
+    description: `This API allows you to manage contents and categories for KSpotlight.
+    
+**Note**: An API token is required for all requests. Use the "Authorize" button to provide your token.`,
   },
   security: [
     {
       AuthorizationApiKey: [],
+    },
+  ],
+  servers: [
+    {
+      url: 'https://api.kspotlight.fr',
+      description: 'Production server',
+    },
+    {
+      url: 'http://localhost:8787',
+      description: 'Local development server',
     },
   ],
 });
