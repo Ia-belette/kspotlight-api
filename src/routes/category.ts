@@ -3,53 +3,18 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
-import { Bindings } from '..';
-import { ContentServices } from '../services/content';
+import { Bindings } from '@/index';
+import { ContentServices } from '@/services/content';
+import {
+  CategoryParamsSchema,
+  CategoryResponseSchema,
+} from '@/schemas/category/category-schemas';
+import {
+  ContentResponseSchema,
+  QuerySchema,
+} from '@/schemas/category/query-schemas';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
-
-const QuerySchema = z.object({
-  pageSize: z
-    .string()
-    .regex(/^\d+$/, { message: 'pageSize must be a valid number' })
-    .optional()
-    .openapi({
-      param: {
-        name: 'pageSize',
-        in: 'query',
-        description: 'Number of items per page (default: 20, max: 100)',
-        required: false,
-      },
-      example: '20',
-    }),
-  after: z
-    .string()
-    .optional()
-    .openapi({
-      param: {
-        name: 'after',
-        in: 'query',
-        description: 'Cursor for pagination',
-        required: false,
-      },
-    }),
-});
-
-const CategoryResponseSchema = z
-  .object({
-    id: z.string().openapi({ example: '18' }),
-    name: z.string().openapi({ example: 'Drama' }),
-  })
-  .array()
-  .openapi('CategoryList');
-
-const ContentResponseSchema = z
-  .object({
-    id: z.string().openapi({ example: 'content123' }),
-    title: z.string().openapi({ example: 'A Great Movie' }),
-  })
-  .array()
-  .openapi('ContentList');
 
 const categoriesRoute = createRoute({
   method: 'get',
@@ -89,33 +54,6 @@ app.openapi(categoriesRoute, async (c) => {
       cause: error.message || 'Internal Server Error',
     });
   }
-});
-
-const CategoryParamsSchema = z.object({
-  categoryId: z
-    .string()
-    .transform((val, ctx) => {
-      const parsed = parseInt(val, 10);
-      if (isNaN(parsed)) {
-        ctx.addIssue({
-          code: 'invalid_type',
-          expected: 'number',
-          received: 'string',
-          message: 'Invalid categoryId',
-        });
-        return z.NEVER;
-      }
-      return parsed;
-    })
-    .openapi({
-      param: {
-        name: 'categoryId',
-        in: 'path',
-        description: 'ID of the category',
-        required: true,
-      },
-      example: '18',
-    }),
 });
 
 const categoryContentRoute = createRoute({
