@@ -12,6 +12,7 @@ import { RecommendedContentResponseSchema } from '@/schemas/content/recommended-
 import { TmdbIdSchema } from '@/schemas/content/tmdb-schemas';
 import { ContentServices } from '@/services/content';
 import { SearchQuerySchema } from '@/schemas/category/search-schemas';
+import { RequestBodySchema } from '@/schemas/category/create-content-schemas';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
@@ -200,6 +201,59 @@ app.openapi(recommendedContentsRoute, async (c) => {
   } catch (error: any) {
     throw new HTTPException(500, {
       message: 'Failed to fetch recommended contents',
+      cause: error.message,
+    });
+  }
+});
+
+const addContentRoute = createRoute({
+  method: 'post',
+  path: 'create',
+  tags: ['Contents'],
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: RequestBodySchema,
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: ContentResponseSchema,
+        },
+      },
+      description: 'Details of a specific content',
+    },
+    400: { description: 'Invalid request data' },
+    404: { description: 'Content not found' },
+    500: { description: 'Internal server error' },
+  },
+});
+
+app.openapi(addContentRoute, async (c) => {
+  try {
+    console.log(c.req.valid('json'));
+
+    const { tmdbId, type, recommended } = c.req.valid('json');
+    console.log(c.req.valid('json'));
+    const contentServices = new ContentServices(c.env.XATA_API_KEY, 'main');
+    const data = await contentServices.addContent(
+      tmdbId,
+      type,
+      recommended,
+      c.env.TMDB_API_KEY
+    );
+
+    return c.json(data);
+  } catch (error: any) {
+    console.log(error);
+    throw new HTTPException(500, {
+      message: 'Failed to add content',
       cause: error.message,
     });
   }
