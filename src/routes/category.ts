@@ -4,13 +4,13 @@ import { z } from '@hono/zod-openapi';
 import { HTTPException } from 'hono/http-exception';
 
 import { Bindings } from '@/index';
-import { ContentServices } from '@/services/content';
 import { CategoryParamsSchema } from '@/schemas/category/category-schemas';
 import {
   ContentResponseSchema,
   QuerySchema,
 } from '@/schemas/category/query-schemas';
 import { CategoryResponseSchema } from '@/schemas/category/category-response';
+import { CategoryServices } from '@/services/category';
 
 const app = new OpenAPIHono<{ Bindings: Bindings }>();
 
@@ -42,8 +42,8 @@ app.openapi(categoriesRoute, async (c) => {
       ? Math.min(parseInt(pageSize, 10), 100)
       : 20;
 
-    const contentServices = new ContentServices(c.env.XATA_API_KEY, 'main');
-    const data = await contentServices.getCategories(parsedPageSize, after);
+    const categoryServices = new CategoryServices(c.env.XATA_API_KEY, 'main');
+    const data = await categoryServices.getCategories(parsedPageSize, after);
 
     return c.json(data);
   } catch (error: any) {
@@ -84,8 +84,8 @@ app.openapi(categoryContentRoute, async (c) => {
     const { categoryId } = c.req.valid('param');
 
     const parsedPageSize = pageSize ? parseInt(pageSize, 10) : 20;
-    const contentServices = new ContentServices(c.env.XATA_API_KEY, 'main');
-    const data = await contentServices.getCategoryContents(
+    const categoryServices = new CategoryServices(c.env.XATA_API_KEY, 'main');
+    const data = await categoryServices.getCategoryContents(
       String(categoryId),
       parsedPageSize,
       after
